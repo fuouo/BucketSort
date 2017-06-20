@@ -21,16 +21,17 @@ public class Main
 			int temp = sc.nextInt();
 			if (i != 0)
 			{
-				while (String.valueOf(arr[i - 1]).length() != String.valueOf(temp).length())
-				{
-					System.out.print("Re-enter #" + i + ": ");
-					temp = sc.nextInt();
-				}
+				// while (String.valueOf(arr[i - 1]).length() !=
+				// String.valueOf(temp).length())
+				// {
+				// System.out.print("Re-enter #" + i + ": ");
+				// temp = sc.nextInt();
+				// }
 			}
 			arr[i] = temp;
 		}
 
-		int[] output = BucketSort.bucketSort(arr);
+		int[] output = BucketSort.bucketSortWithNegative(arr);
 		System.out.println("\n\nResult: ");
 		for (int i = 0; i < output.length; i++)
 		{
