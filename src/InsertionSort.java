@@ -3,18 +3,17 @@ import java.util.ArrayList;
 public class InsertionSort
 {
 	public static void sort(ArrayList<Integer> input)
-	{
-		int temp;
-		for (int i = 1; i < input.size(); i++)
-		{
-			for (int j = i; j > 0; j--)
-			{
-				if (input.get(j) < input.get(j - 1))
-				{
-					temp = input.get(j);
-					input.set(j, input.get(j - 1));
-					input.set(j - 1, temp);
-				}
+	{	
+		int key = 0;
+		int j = 0;
+		for(int i=0; i<input.size(); i++){
+			key = input.get(i);
+			j = i-1;
+			while(j >= 0 && input.get(j)>key){
+				input.set(j+1, input.get(j));
+				j--;
+				input.set(j+1, key);
+				
 			}
 		}
 	}
