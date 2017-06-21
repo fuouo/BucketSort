@@ -88,9 +88,12 @@ public class BucketSort
 		return result;
 	}
 
+	private static int initialBit;
+
 	public static int[] bucketSortRecursive(int[] numberList)
 	{
-		return bucketSort(numberList, getDivider(getMax(numberList)));
+		initialBit = getDivider(getMax(numberList));
+		return bucketSort(numberList, initialBit);
 	}
 
 	private static int getDivider(int n)
@@ -103,6 +106,12 @@ public class BucketSort
 		}
 
 		return divider;
+	}
+
+	private static String tabGenerator(int initialBit, int bit)
+	{
+		return new String(new char[Integer.toString(initialBit).length() - Integer.toString(bit).length()])
+				.replace("\0", "\t");
 	}
 
 	public static int[] bucketSort(int[] numberList, int bit)
@@ -128,6 +137,7 @@ public class BucketSort
 		for (int i = 0; i < bucketCount; i++)
 		{
 			ArrayList<Integer> currBucket = bucketList.get(i);
+			System.out.println(tabGenerator(initialBit, bit) + "Bucket # " + i + currBucket + " || bit : " + bit);
 
 			if (currBucket.size() <= 0)
 				continue;
