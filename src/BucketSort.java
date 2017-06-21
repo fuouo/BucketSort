@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class BucketSort
 {
@@ -26,6 +25,9 @@ public class BucketSort
 		int resultIndex = 0;
 		for (int i = 0; i < bucketCount; i++)
 		{
+			if (bucketList.size() <= 0)
+				continue;
+
 			InsertionSort.sort(bucketList.get(i));
 			// debug
 			System.out.println("Bucket #" + i + " " + bucketList.get(i));
@@ -61,6 +63,9 @@ public class BucketSort
 
 		for (int i = bucketCount - 1; i >= 0; i--)
 		{
+			if (negativeBucketList.size() <= 0)
+				continue;
+
 			InsertionSort.sort(negativeBucketList.get(i));
 
 			ArrayList<Integer> currBucket = negativeBucketList.get(i);
@@ -70,6 +75,9 @@ public class BucketSort
 
 		for (int i = 0; i < bucketCount; i++)
 		{
+			if (positiveBucketList.size() <= 0)
+				continue;
+
 			InsertionSort.sort(positiveBucketList.get(i));
 
 			ArrayList<Integer> currBucket = positiveBucketList.get(i);
@@ -78,6 +86,23 @@ public class BucketSort
 		}
 
 		return result;
+	}
+
+	public static int[] bucketSortRecursive(int[] numberList)
+	{
+		return bucketSort(numberList, getDivider(getMax(numberList)));
+	}
+
+	private static int getDivider(int n)
+	{
+		int divider = 1;
+		while (n / 10 > 0)
+		{
+			divider *= 10;
+			n /= 10;
+		}
+
+		return divider;
 	}
 
 	public static int[] bucketSort(int[] numberList, int bit)
@@ -107,21 +132,11 @@ public class BucketSort
 			if (currBucket.size() <= 0)
 				continue;
 
-			try
-			{
-				if (Arrays.equals(numberList, ArrayUtil.toIntArray(currBucket)))
-					continue;
+			int[] sorted = bucketSort(ArrayUtil.toIntArray(currBucket), bit / 10);
+			currBucket = ArrayUtil.toArrayList(sorted);
 
-				int[] sorted = bucketSort(ArrayUtil.toIntArray(currBucket), bit / 10);
-
-				currBucket = ArrayUtil.toArrayList(sorted);
-			}
-			finally
-			{
-
-				for (int j = 0; j < currBucket.size(); j++)
-					result[resultIndex++] = currBucket.get(j);
-			}
+			for (int j = 0; j < currBucket.size(); j++)
+				result[resultIndex++] = currBucket.get(j);
 		}
 
 		return result;
