@@ -31,7 +31,7 @@ public class Main
 			arr[i] = temp;
 		}
 
-		int[] output = BucketSort.bucketSortWithNegative(arr);
+		int[] output = BucketSort.bucketSort(arr);
 		System.out.println("\n\nResult: ");
 		for (int i = 0; i < output.length; i++)
 		{

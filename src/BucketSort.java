@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class BucketSort
 {
@@ -9,18 +10,25 @@ public class BucketSort
 		final int bucketCount = 10;
 		final int divider = (int) Math.ceil((max + 1) / (float) bucketCount);
 
+		System.out.println("Max: " + max + " || Divider : " + divider);
 		// Generate the buckets
 		ArrayList<ArrayList<Integer>> bucketList = initBuckets(bucketCount);
 
 		// Assign to buckets
 		for (int i = 0; i < numberList.length; i++)
+		{
+			System.out.println(
+					"# " + numberList[i] + " || Assigned Bucket: " + (int) Math.floor(numberList[i] / (float) divider));
 			bucketList.get((int) Math.floor(numberList[i] / (float) divider)).add(numberList[i]);
 
+		}
 		// Sort + Merge the buckets
 		int resultIndex = 0;
 		for (int i = 0; i < bucketCount; i++)
 		{
 			InsertionSort.sort(bucketList.get(i));
+			// debug
+			System.out.println("Bucket #" + i + " " + bucketList.get(i));
 
 			ArrayList<Integer> currBucket = bucketList.get(i);
 			for (int j = 0; j < currBucket.size(); j++)
@@ -28,16 +36,6 @@ public class BucketSort
 		}
 
 		return result;
-	}
-
-	private static ArrayList<ArrayList<Integer>> initBuckets(int size)
-	{
-		ArrayList<ArrayList<Integer>> bucketList = new ArrayList<ArrayList<Integer>>(size);
-
-		for (int i = 0; i < size; i++)
-			bucketList.add(new ArrayList<>());
-
-		return bucketList;
 	}
 
 	public static int[] bucketSortWithNegative(int[] numberList)
@@ -80,6 +78,63 @@ public class BucketSort
 		}
 
 		return result;
+	}
+
+	public static int[] bucketSort(int[] numberList, int bit)
+	{
+		if (bit == 0)
+			return numberList;
+
+		if (numberList.length == 1)
+			return numberList;
+
+		int[] result = new int[numberList.length];
+		final int bucketCount = 10;
+
+		// Generate the buckets
+		ArrayList<ArrayList<Integer>> bucketList = initBuckets(bucketCount);
+
+		// Assign to buckets
+		for (int i = 0; i < numberList.length; i++)
+			bucketList.get((int) Math.floor(numberList[i] / (float) bit % 10)).add(numberList[i]);
+
+		// Sort + Merge the buckets
+		int resultIndex = 0;
+		for (int i = 0; i < bucketCount; i++)
+		{
+			ArrayList<Integer> currBucket = bucketList.get(i);
+
+			if (currBucket.size() <= 0)
+				continue;
+
+			try
+			{
+				if (Arrays.equals(numberList, ArrayUtil.toIntArray(currBucket)))
+					continue;
+
+				int[] sorted = bucketSort(ArrayUtil.toIntArray(currBucket), bit / 10);
+
+				currBucket = ArrayUtil.toArrayList(sorted);
+			}
+			finally
+			{
+
+				for (int j = 0; j < currBucket.size(); j++)
+					result[resultIndex++] = currBucket.get(j);
+			}
+		}
+
+		return result;
+	}
+
+	private static ArrayList<ArrayList<Integer>> initBuckets(int size)
+	{
+		ArrayList<ArrayList<Integer>> bucketList = new ArrayList<ArrayList<Integer>>(size);
+
+		for (int i = 0; i < size; i++)
+			bucketList.add(new ArrayList<>());
+
+		return bucketList;
 	}
 
 	private static int getMax(int[] a)
